@@ -4,6 +4,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/spf13/viper"
 	"log"
 	"os"
 	"strings"
@@ -53,4 +54,18 @@ func Log(message, priority string) {
 func GetHostname() string {
 	hostname, _ := os.Hostname()
 	return hostname
+}
+
+// LoadConfig loads the configuration from a config file.
+func LoadConfig() {
+	Log("Loading viper config.", "info")
+	viper.SetConfigName("config")
+	viper.AddConfigPath("/etc/octohost/")
+	viper.AddConfigPath(".")
+	viper.SetConfigType("yaml")
+	err := viper.ReadInConfig()
+	if err != nil {
+		Log(fmt.Sprintf("Fatal error opening config file: %s \n", err), "info")
+	}
+	viper.SetEnvPrefix("OCTO")
 }

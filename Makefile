@@ -9,6 +9,7 @@ deps:
 	go get -u github.com/spf13/cobra
 	go get -u github.com/progrium/basht
 	go get -u github.com/CiscoCloud/consul-cli
+	go get -u github.com/spf13/viper
 
 format:
 	gofmt -w .
