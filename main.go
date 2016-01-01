@@ -31,7 +31,7 @@ func main() {
 	if e == nil {
 		log.SetOutput(logwriter)
 	}
-	cmd.Log(fmt.Sprintf("octo version:%s", Version), "info")
+	cmd.Log(fmt.Sprintf("octo version: %s", Version), "info")
 
 	args := os.Args[1:]
 	for _, arg := range args {
