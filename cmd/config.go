@@ -1,3 +1,5 @@
+// +build linux darwin freebsd
+
 package cmd
 
 import (
@@ -16,7 +18,20 @@ var configCmd = &cobra.Command{
 }
 
 func startConfig(cmd *cobra.Command, args []string) {
-
+	consul, err := ConsulSetup()
+	if err != nil {
+		Log("Fatal Consul setup problem.", "info")
+	}
+	if ConsulSet(consul, "testing", "the-value") {
+		Log("Set the value at testing", "info")
+	}
+	value, err := ConsulGet(consul, "testing")
+	if value == "" {
+		Log("Nothing at that key.", "info")
+	}
+	if ConsulDel(consul, "testing") {
+		Log("Removed the value at testing", "info")
+	}
 }
 
 func checkConfigFlags() {
