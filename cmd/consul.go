@@ -11,11 +11,9 @@ import (
 )
 
 const (
-	consulServer   = "127.0.0.1:8500"
-	consulToken    = "anonymous"
-	consulGetTries = 5
-	consulSetTries = 5
-	consulDelTries = 5
+	consulServer = "127.0.0.1:8500"
+	consulToken  = "anonymous"
+	consulTries  = 5
 )
 
 // ConsulSetup sets up a connection to Consul.
@@ -70,7 +68,7 @@ func cleanupToken(token string) string {
 
 // ConsulGet the value from a key in the Consul KV store.
 func ConsulGet(c *consul.Client, key string) (string, error) {
-	maxTries := consulGetTries
+	maxTries := consulTries
 	for tries := 1; tries <= maxTries; tries++ {
 		value, err := consulGet(c, key)
 		if err == nil {
@@ -106,7 +104,7 @@ func consulGet(c *consul.Client, key string) (string, error) {
 
 // ConsulSet the value for a key in the Consul KV store.
 func ConsulSet(c *consul.Client, key string, value string) bool {
-	maxTries := consulSetTries
+	maxTries := consulTries
 	for tries := 1; tries <= maxTries; tries++ {
 		if consulSet(c, key, value) {
 			return true
@@ -136,7 +134,7 @@ func consulSet(c *consul.Client, key string, value string) bool {
 
 // ConsulDel removes a key from the Consul KV store.
 func ConsulDel(c *consul.Client, key string) bool {
-	maxTries := consulDelTries
+	maxTries := consulTries
 	for tries := 1; tries <= maxTries; tries++ {
 		if consulDel(c, key) {
 			return true
