@@ -10,6 +10,7 @@ deps:
 	go get -u github.com/progrium/basht
 	go get -u github.com/CiscoCloud/consul-cli
 	go get -u github.com/spf13/viper
+	go get -u github.com/hashicorp/consul/api
 
 format:
 	gofmt -w .
