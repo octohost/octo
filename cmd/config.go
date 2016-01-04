@@ -44,7 +44,6 @@ func ConfigPath() string {
 	if prefix = viper.GetString("prefix"); prefix == "" {
 		prefix = ConsulPrefix
 	}
-	ConfigKey = strings.ToUpper(ConfigKey)
-	fullPath := fmt.Sprintf("%s/%s/%s", strings.TrimPrefix(prefix, "/"), Container, ConfigKey)
+	fullPath := fmt.Sprintf("%s/%s/%s", strings.TrimPrefix(prefix, "/"), Container, strings.ToUpper(ConfigKey))
 	return fullPath
 }
