@@ -5,6 +5,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var configGetCmd = &cobra.Command{
@@ -19,13 +20,36 @@ var configGetCmd = &cobra.Command{
 }
 
 func startConfigGet(cmd *cobra.Command, args []string) {
-	fmt.Println("Get")
+	fullPath := ConfigPath()
+	value := ConfigGet(fullPath)
+	if value != "" {
+		fmt.Printf("%s\n", value)
+	}
 }
 
 func checkConfigGetFlags() {
-	Log("Checking flags", "info")
+	Log("Checking cli flags.", "debug")
+	if Container == "" {
+		fmt.Println("A container is required: -c")
+		os.Exit(1)
+	}
+	if ConfigKey == "" {
+		fmt.Println("A key is required: --key")
+		os.Exit(1)
+	}
+	Log("Required cli flags are present.", "debug")
 }
 
 func init() {
 	configCmd.AddCommand(configGetCmd)
+}
+
+// ConfigGet returns the value of the key passed.
+func ConfigGet(key string) string {
+	consul, err := ConsulSetup()
+	if err != nil {
+		Log("Fatal Consul setup problem.", "info")
+	}
+	value, _ := ConsulGet(consul, key)
+	return value
 }

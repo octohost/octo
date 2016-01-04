@@ -19,6 +19,12 @@ var RootCmd = &cobra.Command{
 	},
 }
 
+const (
+	// ConsulPrefix is the default location where we will be storing all configuration.
+	// It can be overwritten with the "prefix" value in the config.yaml file.
+	ConsulPrefix = "octohost"
+)
+
 var (
 	// Direction adds information about which command is running to the logs.
 	Direction string
