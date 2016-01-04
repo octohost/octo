@@ -65,7 +65,7 @@ func LoadConfig() {
 	viper.SetConfigType("yaml")
 	err := viper.ReadInConfig()
 	if err != nil {
-		Log(fmt.Sprintf("Fatal error opening config file: %s \n", err), "info")
+		Log(fmt.Sprintf("No config file found: %s \n", err), "info")
 	}
 	viper.SetEnvPrefix("OCTO")
 }
