@@ -37,12 +37,12 @@ consul:
 	consul agent -data-dir `mktemp -d` -bootstrap -server -bind=127.0.0.1 1>/dev/null &
 
 consul_kill:
-	ps auxwww | grep "[c]onsul agent.*tmp.*bind.127.*" | cut -d ' ' -f 4 | xargs kill
+	pkill consul
 
 unit:
 	cd cmd && go test -v -cover
 
-test: unit wercker
+test: consul unit wercker
 
 wercker: consul
 	basht test/tests.bash
