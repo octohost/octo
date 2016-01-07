@@ -50,6 +50,6 @@ func ConfigGet(key string) string {
 	if err != nil {
 		Log("Fatal Consul setup problem.", "info")
 	}
-	value, _ := ConsulGet(consul, key)
+	value := ConsulGet(consul, key)
 	return value
 }
