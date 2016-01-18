@@ -5,6 +5,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var configDelCmd = &cobra.Command{
@@ -20,13 +21,36 @@ var configDelCmd = &cobra.Command{
 }
 
 func startConfigDel(cmd *cobra.Command, args []string) {
-	fmt.Println("Del")
+	config := ConfigEnv{Container: Container, Key: ConfigKey}
+	value := config.Del()
+	if value {
+		Log(fmt.Sprintf("Deleted %s", config.Path()), "info")
+	}
 }
 
 func checkConfigDelFlags() {
-	Log("Checking flags", "info")
+	Log("Checking cli flags.", "debug")
+	if Container == "" {
+		fmt.Println("A container is required: -c")
+		os.Exit(1)
+	}
+	if ConfigKey == "" {
+		fmt.Println("A key is required: --key")
+		os.Exit(1)
+	}
+	Log("Required cli flags are present.", "debug")
 }
 
 func init() {
 	configCmd.AddCommand(configDelCmd)
+}
+
+// Del returns the value of the key passed.
+func (c *ConfigEnv) Del() bool {
+	consul, err := ConsulSetup()
+	if err != nil {
+		Log("Fatal Consul setup problem.", "info")
+	}
+	value := ConsulDel(consul, c.Path())
+	return value
 }
