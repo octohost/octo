@@ -121,6 +121,7 @@ func (c *ConfigEnv) Variables() []ConfigEnv {
 	return vars
 }
 
+// Show lists all config variables for a particular container.
 func (c *ConfigEnv) Show() {
 	if strings.Contains(c.Value, " ") {
 		c.Value = fmt.Sprintf("\"%s\"", c.Value)
