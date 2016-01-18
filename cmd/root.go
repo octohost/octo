@@ -5,6 +5,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 // RootCmd is the default Cobra struct that starts it all off.
@@ -34,6 +35,6 @@ var (
 )
 
 func init() {
-	Direction = SetDirection()
+	Direction = SetDirection(fmt.Sprintf("%s", os.Args))
 	RootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "", false, "log output to stdout")
 }

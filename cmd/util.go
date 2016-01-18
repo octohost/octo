@@ -19,14 +19,14 @@ func ReturnCurrentUTC() string {
 }
 
 // SetDirection returns the direction.
-func SetDirection() string {
-	args := fmt.Sprintf("%x", os.Args)
+func SetDirection(args string) string {
+	argsSplit := strings.Split(args, " ")
 	direction := "main"
 	if strings.ContainsAny(args, " ") {
-		if strings.HasPrefix(os.Args[1], "-") {
+		if strings.HasPrefix(argsSplit[1], "-") {
 			direction = "main"
 		} else {
-			direction = os.Args[1]
+			direction = argsSplit[1]
 		}
 	}
 	return direction
