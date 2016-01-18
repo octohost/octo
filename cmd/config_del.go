@@ -45,7 +45,7 @@ func init() {
 	configCmd.AddCommand(configDelCmd)
 }
 
-// Del returns the value of the key passed.
+// Del deletes a key from Consul.
 func (c *ConfigEnv) Del() bool {
 	consul, err := ConsulSetup()
 	if err != nil {
