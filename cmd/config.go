@@ -94,6 +94,7 @@ func (c *ConfigEnv) Del() bool {
 	return value
 }
 
+// Keys shows the keys for a particular Container.
 func (c *ConfigEnv) Keys() []string {
 	consul, err := ConsulSetup()
 	if err != nil {

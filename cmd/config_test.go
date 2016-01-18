@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"reflect"
 	"testing"
 )
 
@@ -50,4 +51,18 @@ func TestConsulDelEnvVar(t *testing.T) {
 			}
 		}
 	}
+}
+
+func TestConfigEnvKeys(t *testing.T) {
+	var testKeys = []string{"octohost/testing/KEY1", "octohost/testing/KEY2"}
+	config1 := ConfigEnv{Container: "testing", Key: "key1", Value: "This is the value for key 1."}
+	config1.Set()
+	config2 := ConfigEnv{Container: "testing", Key: "key2", Value: "This is the value for key 2."}
+	config2.Set()
+	config := ConfigEnv{Container: "testing"}
+	keys := config.Keys()
+	if !reflect.DeepEqual(keys, testKeys) {
+		t.Error("The slices aren't equal.")
+	}
+
 }
