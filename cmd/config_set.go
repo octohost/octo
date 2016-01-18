@@ -48,16 +48,3 @@ func checkConfigSetFlags() {
 func init() {
 	configCmd.AddCommand(configSetCmd)
 }
-
-// Set sets a key to a value for a container.
-func (c *ConfigEnv) Set() bool {
-	consul, err := ConsulSetup()
-	if err != nil {
-		Log("Fatal Consul setup problem.", "info")
-	}
-	if ConsulSet(consul, c.Path(), c.Value) {
-		Log(fmt.Sprintf("ConfigSet key='%s'", c.Path()), "info")
-		return true
-	}
-	return false
-}

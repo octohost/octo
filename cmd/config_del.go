@@ -44,13 +44,3 @@ func checkConfigDelFlags() {
 func init() {
 	configCmd.AddCommand(configDelCmd)
 }
-
-// Del deletes a key from Consul.
-func (c *ConfigEnv) Del() bool {
-	consul, err := ConsulSetup()
-	if err != nil {
-		Log("Fatal Consul setup problem.", "info")
-	}
-	value := ConsulDel(consul, c.Path())
-	return value
-}

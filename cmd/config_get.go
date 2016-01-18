@@ -43,13 +43,3 @@ func checkConfigGetFlags() {
 func init() {
 	configCmd.AddCommand(configGetCmd)
 }
-
-// Get returns the value of the key passed.
-func (c *ConfigEnv) Get() string {
-	consul, err := ConsulSetup()
-	if err != nil {
-		Log("Fatal Consul setup problem.", "info")
-	}
-	value := ConsulGet(consul, c.Path())
-	return value
-}

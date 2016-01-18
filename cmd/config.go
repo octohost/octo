@@ -16,13 +16,6 @@ var configCmd = &cobra.Command{
 	Run:   startConfig,
 }
 
-// ConfigEnv is the struct for an environmental variable for a container.
-type ConfigEnv struct {
-	Container string
-	Key       string
-	Value     string
-}
-
 func startConfig(cmd *cobra.Command, args []string) {
 	fmt.Println("octo config -h")
 }
@@ -45,6 +38,13 @@ func init() {
 	configCmd.PersistentFlags().StringVarP(&ConfigValue, "value", "", "", "Value for environmental variable.")
 }
 
+// ConfigEnv is the struct for an environmental variable for a container.
+type ConfigEnv struct {
+	Container string
+	Key       string
+	Value     string
+}
+
 // Path returns the entire Consul path for a Consul config variable.
 func (c *ConfigEnv) Path() string {
 	prefix := ""
@@ -53,4 +53,37 @@ func (c *ConfigEnv) Path() string {
 	}
 	fullPath := fmt.Sprintf("%s/%s/%s", strings.TrimPrefix(prefix, "/"), c.Container, strings.ToUpper(c.Key))
 	return fullPath
+}
+
+// Get returns the value of the key passed.
+func (c *ConfigEnv) Get() string {
+	consul, err := ConsulSetup()
+	if err != nil {
+		Log("Fatal Consul setup problem.", "info")
+	}
+	value := ConsulGet(consul, c.Path())
+	return value
+}
+
+// Set sets a key to a value for a container.
+func (c *ConfigEnv) Set() bool {
+	consul, err := ConsulSetup()
+	if err != nil {
+		Log("Fatal Consul setup problem.", "info")
+	}
+	if ConsulSet(consul, c.Path(), c.Value) {
+		Log(fmt.Sprintf("ConfigSet key='%s'", c.Path()), "info")
+		return true
+	}
+	return false
+}
+
+// Del deletes a key from Consul.
+func (c *ConfigEnv) Del() bool {
+	consul, err := ConsulSetup()
+	if err != nil {
+		Log("Fatal Consul setup problem.", "info")
+	}
+	value := ConsulDel(consul, c.Path())
+	return value
 }
