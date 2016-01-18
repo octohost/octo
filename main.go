@@ -41,6 +41,5 @@ func main() {
 		}
 	}
 
-	runtime.GOMAXPROCS(runtime.NumCPU())
 	cmd.RootCmd.Execute()
 }
