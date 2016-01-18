@@ -35,18 +35,14 @@ func ConsulSetup() (*consul.Client, error) {
 
 // consulConnect to the Consul server and hand back a client object.
 func consulConnect(server, token string) (*consul.Client, error) {
-	var cleanedToken = ""
 	config := consul.DefaultConfig()
 	config.Address = server
-	// Let's clean up the token so it doesn't appear in the logs.
-	if token != "" {
-		config.Token = token
-	}
+	config.Token = token
 	consul, err := consul.NewClient(config)
 	if err != nil {
 		return nil, err
 	}
-	Log(fmt.Sprintf("server='%s' token='%s'", server, cleanedToken), "debug")
+	Log(fmt.Sprintf("server='%s' token='%s'", server, cleanupToken(token)), "debug")
 	return consul, nil
 }
 
