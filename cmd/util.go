@@ -69,3 +69,11 @@ func LoadConfig() {
 	}
 	viper.SetEnvPrefix("OCTO")
 }
+
+// SpaceCheck looks to see if the value contains a space.
+func SpaceCheck(value string, name string) {
+	if strings.Contains(value, " ") {
+		fmt.Printf("A %s cannot contain a space.\n", name)
+		os.Exit(1)
+	}
+}

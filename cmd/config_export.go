@@ -33,6 +33,7 @@ func checkConfigExportFlags() {
 		fmt.Println("A container is required: -c")
 		os.Exit(1)
 	}
+	SpaceCheck(Container, "container")
 	Log("Required cli flags are present.", "debug")
 }
 

@@ -33,10 +33,12 @@ func checkConfigGetFlags() {
 		fmt.Println("A container is required: -c")
 		os.Exit(1)
 	}
+	SpaceCheck(Container, "container")
 	if ConfigKey == "" {
 		fmt.Println("A key is required: --key")
 		os.Exit(1)
 	}
+	SpaceCheck(ConfigKey, "key")
 	Log("Required cli flags are present.", "debug")
 }
 
