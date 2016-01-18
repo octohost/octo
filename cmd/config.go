@@ -45,13 +45,19 @@ type ConfigEnv struct {
 	Value     string
 }
 
-// Path returns the entire Consul path for a Consul config variable.
-func (c *ConfigEnv) Path() string {
+// Prefix returns the Consul path for the Container.
+func (c *ConfigEnv) Prefix() string {
 	prefix := ""
 	if prefix = viper.GetString("prefix"); prefix == "" {
 		prefix = ConsulPrefix
 	}
-	fullPath := fmt.Sprintf("%s/%s/%s", strings.TrimPrefix(prefix, "/"), c.Container, strings.ToUpper(c.Key))
+	containerPath := fmt.Sprintf("%s/%s", strings.TrimPrefix(prefix, "/"), c.Container)
+	return containerPath
+}
+
+// Path returns the entire Consul path for a Consul config variable.
+func (c *ConfigEnv) Path() string {
+	fullPath := fmt.Sprintf("%s/%s", c.Prefix(), strings.ToUpper(c.Key))
 	return fullPath
 }
 

@@ -4,13 +4,22 @@ import (
 	"testing"
 )
 
+func TestConsulConfigPrefix(t *testing.T) {
+	Container = "testing"
+	config := ConfigEnv{Container: Container}
+	prefixPath := config.Prefix()
+	if prefixPath != "octohost/testing" {
+		t.Errorf("The Prefix() was incorrect: %s", prefixPath)
+	}
+}
+
 func TestConsulConfigPath(t *testing.T) {
 	Container = "testing"
 	ConfigKey = "octo"
 	config := ConfigEnv{Container: Container, Key: ConfigKey}
 	fullPath := config.Path()
 	if fullPath != "octohost/testing/OCTO" {
-		t.Errorf("The ConfigPath() was incorrect: %s", fullPath)
+		t.Errorf("The Path() was incorrect: %s", fullPath)
 	}
 }
 
