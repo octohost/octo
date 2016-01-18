@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"
+	"strings"
 )
 
 var configSetCmd = &cobra.Command{
@@ -36,6 +37,10 @@ func checkConfigSetFlags() {
 	}
 	if ConfigKey == "" {
 		fmt.Println("A key is required: --key")
+		os.Exit(1)
+	}
+	if strings.Contains(ConfigKey, " ") {
+		fmt.Println("A key cannot contain a space.")
 		os.Exit(1)
 	}
 	if ConfigValue == "" {
