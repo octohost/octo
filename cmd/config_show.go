@@ -21,14 +21,9 @@ var configShowCmd = &cobra.Command{
 
 func startConfigShow(cmd *cobra.Command, args []string) {
 	config := ConfigEnv{Container: Container}
-	prefix := config.Prefix()
-	if prefix != "" {
-		keys := config.Keys()
-		if keys != nil {
-			for _, value := range keys {
-				fmt.Printf("%s\n", value)
-			}
-		}
+	configs := config.Variables()
+	for _, c := range configs {
+		c.Show()
 	}
 }
 

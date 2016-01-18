@@ -103,3 +103,27 @@ func (c *ConfigEnv) Keys() []string {
 	value := ConsulKeys(consul, c.Prefix())
 	return value
 }
+
+// Variables returns all ConfigEnv structs for particular container.
+func (c *ConfigEnv) Variables() []ConfigEnv {
+	var vars []ConfigEnv
+	consul, err := ConsulSetup()
+	if err != nil {
+		Log("Fatal Consul setup problem.", "info")
+	}
+	keys := c.Keys()
+	for _, value := range keys {
+		keyValue := ConsulGet(consul, value)
+		split := strings.Split(value, "/")
+		cvar := ConfigEnv{Container: split[1], Key: split[2], Value: keyValue}
+		vars = append(vars, cvar)
+	}
+	return vars
+}
+
+func (c *ConfigEnv) Show() {
+	if strings.Contains(c.Value, " ") {
+		c.Value = fmt.Sprintf("\"%s\"", c.Value)
+	}
+	fmt.Printf("/%s/%s:%s\n", c.Container, c.Key, c.Value)
+}
