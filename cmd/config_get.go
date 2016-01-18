@@ -21,8 +21,7 @@ var configGetCmd = &cobra.Command{
 
 func startConfigGet(cmd *cobra.Command, args []string) {
 	config := ConfigEnv{Container: Container, Key: ConfigKey}
-	fullPath := config.Path()
-	value := ConfigGet(fullPath)
+	value := config.Get()
 	if value != "" {
 		fmt.Printf("%s\n", value)
 	}
@@ -45,12 +44,13 @@ func init() {
 	configCmd.AddCommand(configGetCmd)
 }
 
-// ConfigGet returns the value of the key passed.
-func ConfigGet(key string) string {
+// Get returns the value of the key passed.
+func (c *ConfigEnv) Get() string {
 	consul, err := ConsulSetup()
 	if err != nil {
 		Log("Fatal Consul setup problem.", "info")
 	}
+	key := c.Path()
 	value := ConsulGet(consul, key)
 	return value
 }

@@ -21,10 +21,9 @@ func TestConsulSetEnvVar(t *testing.T) {
 	ConfigKey = "octo"
 	ConfigValue = "This is the value for the octo key."
 	config := ConfigEnv{Container: Container, Key: ConfigKey, Value: ConfigValue}
-	fullPath := config.Path()
-	if ConfigSet(fullPath, ConfigValue) {
-		t.Logf("Set the key %s.", fullPath)
-		value := ConfigGet(fullPath)
+	if config.Set() {
+		t.Logf("Set the key %s.", config.Path())
+		value := config.Get()
 		if value != "This is the value for the octo key." {
 			t.Errorf("The env var is NOT correct.")
 		}

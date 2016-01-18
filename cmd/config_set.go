@@ -21,8 +21,7 @@ var configSetCmd = &cobra.Command{
 
 func startConfigSet(cmd *cobra.Command, args []string) {
 	config := ConfigEnv{Container: Container, Key: ConfigKey, Value: ConfigValue}
-	fullPath := config.Path()
-	if ConfigSet(fullPath, ConfigValue) {
+	if config.Set() {
 		Log(fmt.Sprintf("set key='%s'", ConfigKey), "info")
 	} else {
 		fmt.Printf("Error: config set key='%s'\n", ConfigKey)
@@ -50,13 +49,14 @@ func init() {
 	configCmd.AddCommand(configSetCmd)
 }
 
-// ConfigSet sets a key to a value for a container.
-func ConfigSet(path string, value string) bool {
+// Set sets a key to a value for a container.
+func (c *ConfigEnv) Set() bool {
 	consul, err := ConsulSetup()
 	if err != nil {
 		Log("Fatal Consul setup problem.", "info")
 	}
-	if ConsulSet(consul, path, value) {
+	path := c.Path()
+	if ConsulSet(consul, path, c.Value) {
 		Log(fmt.Sprintf("ConfigSet key='%s'", path), "info")
 		return true
 	}
