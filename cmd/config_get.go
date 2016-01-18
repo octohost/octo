@@ -20,7 +20,8 @@ var configGetCmd = &cobra.Command{
 }
 
 func startConfigGet(cmd *cobra.Command, args []string) {
-	fullPath := ConfigPath()
+	config := ConfigEnv{Container: Container, Key: ConfigKey}
+	fullPath := config.Path()
 	value := ConfigGet(fullPath)
 	if value != "" {
 		fmt.Printf("%s\n", value)

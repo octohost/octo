@@ -9,7 +9,8 @@ import (
 func TestConsulConfigPath(t *testing.T) {
 	Container = "testing"
 	ConfigKey = "octo"
-	fullPath := ConfigPath()
+	config := ConfigEnv{Container: Container, Key: ConfigKey}
+	fullPath := config.Path()
 	if fullPath != "octohost/testing/OCTO" {
 		t.Errorf("The ConfigPath() was incorrect: %s", fullPath)
 	}
@@ -19,7 +20,8 @@ func TestConsulSetEnvVar(t *testing.T) {
 	Container = "testing"
 	ConfigKey = "octo"
 	ConfigValue = "This is the value for the octo key."
-	fullPath := ConfigPath()
+	config := ConfigEnv{Container: Container, Key: ConfigKey, Value: ConfigValue}
+	fullPath := config.Path()
 	if ConfigSet(fullPath, ConfigValue) {
 		t.Logf("Set the key %s.", fullPath)
 		value := ConfigGet(fullPath)

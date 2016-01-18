@@ -16,6 +16,13 @@ var configCmd = &cobra.Command{
 	Run:   startConfig,
 }
 
+// ConfigEnv is the struct for an environmental variable for a container.
+type ConfigEnv struct {
+	Container string
+	Key       string
+	Value     string
+}
+
 func startConfig(cmd *cobra.Command, args []string) {
 	fmt.Println("octo config -h")
 }
@@ -38,12 +45,12 @@ func init() {
 	configCmd.PersistentFlags().StringVarP(&ConfigValue, "value", "", "", "Value for environmental variable.")
 }
 
-// ConfigPath returns the entire Consul path for a Consul config variable.
-func ConfigPath() string {
+// Path returns the entire Consul path for a Consul config variable.
+func (c *ConfigEnv) Path() string {
 	prefix := ""
 	if prefix = viper.GetString("prefix"); prefix == "" {
 		prefix = ConsulPrefix
 	}
-	fullPath := fmt.Sprintf("%s/%s/%s", strings.TrimPrefix(prefix, "/"), Container, strings.ToUpper(ConfigKey))
+	fullPath := fmt.Sprintf("%s/%s/%s", strings.TrimPrefix(prefix, "/"), c.Container, strings.ToUpper(c.Key))
 	return fullPath
 }

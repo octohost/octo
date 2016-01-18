@@ -20,7 +20,8 @@ var configSetCmd = &cobra.Command{
 }
 
 func startConfigSet(cmd *cobra.Command, args []string) {
-	fullPath := ConfigPath()
+	config := ConfigEnv{Container: Container, Key: ConfigKey, Value: ConfigValue}
+	fullPath := config.Path()
 	if ConfigSet(fullPath, ConfigValue) {
 		Log(fmt.Sprintf("set key='%s'", ConfigKey), "info")
 	} else {
