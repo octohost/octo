@@ -50,7 +50,6 @@ func (c *ConfigEnv) Get() string {
 	if err != nil {
 		Log("Fatal Consul setup problem.", "info")
 	}
-	key := c.Path()
-	value := ConsulGet(consul, key)
+	value := ConsulGet(consul, c.Path())
 	return value
 }

@@ -55,9 +55,8 @@ func (c *ConfigEnv) Set() bool {
 	if err != nil {
 		Log("Fatal Consul setup problem.", "info")
 	}
-	path := c.Path()
-	if ConsulSet(consul, path, c.Value) {
-		Log(fmt.Sprintf("ConfigSet key='%s'", path), "info")
+	if ConsulSet(consul, c.Path(), c.Value) {
+		Log(fmt.Sprintf("ConfigSet key='%s'", c.Path()), "info")
 		return true
 	}
 	return false
