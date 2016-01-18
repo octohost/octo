@@ -93,3 +93,12 @@ func (c *ConfigEnv) Del() bool {
 	value := ConsulDel(consul, c.Path())
 	return value
 }
+
+func (c *ConfigEnv) Keys() []string {
+	consul, err := ConsulSetup()
+	if err != nil {
+		Log("Fatal Consul setup problem.", "info")
+	}
+	value := ConsulKeys(consul, c.Prefix())
+	return value
+}

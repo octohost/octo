@@ -100,6 +100,25 @@ func consulGet(c *consul.Client, key string) (string, error) {
 	return value, err
 }
 
+// ConsulKeys the keys from a prefix under the Consul KV tree.
+func ConsulKeys(c *consul.Client, prefix string) []string {
+	var str []string
+	Retry(func() error {
+		var err error
+		str, err = consulKeys(c, prefix)
+		return err
+	}, consulTries)
+	return str
+}
+
+func consulKeys(c *consul.Client, prefix string) ([]string, error) {
+	var keys []string
+	kv := c.KV()
+	prefix = strings.TrimPrefix(prefix, "/")
+	keys, _, err := kv.Keys(prefix, "", nil)
+	return keys, err
+}
+
 // ConsulSet the value for a key in the Consul KV store.
 func ConsulSet(c *consul.Client, key string, value string) bool {
 	var success bool
