@@ -5,6 +5,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 var configExportCmd = &cobra.Command{
@@ -19,11 +20,20 @@ var configExportCmd = &cobra.Command{
 }
 
 func startConfigExport(cmd *cobra.Command, args []string) {
-	fmt.Println("Export")
+	config := ConfigEnv{Container: Container}
+	configs := config.Variables()
+	for _, c := range configs {
+		c.Export()
+	}
 }
 
 func checkConfigExportFlags() {
-	Log("Checking flags", "info")
+	Log("Checking cli flags.", "debug")
+	if Container == "" {
+		fmt.Println("A container is required: -c")
+		os.Exit(1)
+	}
+	Log("Required cli flags are present.", "debug")
 }
 
 func init() {

@@ -121,6 +121,11 @@ func (c *ConfigEnv) Variables() []ConfigEnv {
 	return vars
 }
 
+// Export lists all config in an easy to import format.
+func (c *ConfigEnv) Export() {
+	fmt.Printf("octo config set -c=\"%s\" --key=\"%s\" --value=\"%s\"\n", c.Container, c.Key, c.Value)
+}
+
 // Show lists all config variables for a particular container.
 func (c *ConfigEnv) Show() {
 	if strings.Contains(c.Value, " ") {
