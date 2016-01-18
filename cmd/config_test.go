@@ -27,3 +27,18 @@ func TestConsulSetEnvVar(t *testing.T) {
 		}
 	}
 }
+
+func TestConsulDelEnvVar(t *testing.T) {
+	Container = "testing"
+	ConfigKey = "octo"
+	ConfigValue = "This is the value for the octo key."
+	config := ConfigEnv{Container: Container, Key: ConfigKey, Value: ConfigValue}
+	if config.Set() {
+		if config.Del() {
+			value := config.Get()
+			if value != "" {
+				t.Error("Should not have been able to get it.")
+			}
+		}
+	}
+}
