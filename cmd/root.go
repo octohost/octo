@@ -32,9 +32,13 @@ var (
 
 	// Verbose logs all output to stdout.
 	Verbose bool
+
+	// Container is the Docker container we are loading config for.
+	Container string
 )
 
 func init() {
 	Direction = SetDirection(fmt.Sprintf("%s", os.Args))
 	RootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "", false, "log output to stdout")
+	RootCmd.PersistentFlags().StringVarP(&Container, "container", "c", "", "Docker Container")
 }

@@ -21,9 +21,6 @@ func startConfig(cmd *cobra.Command, args []string) {
 }
 
 var (
-	// Container is the Docker container we are loading config for.
-	Container string
-
 	// ConfigKey is the key for the ENV variable.
 	ConfigKey string
 
@@ -33,7 +30,6 @@ var (
 
 func init() {
 	RootCmd.AddCommand(configCmd)
-	configCmd.PersistentFlags().StringVarP(&Container, "container", "c", "", "Docker Container")
 	configCmd.PersistentFlags().StringVarP(&ConfigKey, "key", "", "", "Key for environmental variable.")
 	configCmd.PersistentFlags().StringVarP(&ConfigValue, "value", "", "", "Value for environmental variable.")
 }
