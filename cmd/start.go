@@ -4,6 +4,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/samalba/dockerclient"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
@@ -26,7 +27,8 @@ const (
 )
 
 func startStart(cmd *cobra.Command, args []string) {
-	//image := GetImage(Container)
+	image := GetImage(Container)
+	image.Start()
 }
 
 // Image is the struct for a Docker image.
@@ -70,4 +72,24 @@ func GetImage(containerName string) Image {
 	buildOrg := GetBuildOrg()
 	image := Image{Name: containerName, BuildOrg: buildOrg}
 	return image
+}
+
+// PrintName returns the full name of the Image.
+func (i *Image) PrintName() string {
+	name := fmt.Sprintf("%s/%s", i.BuildOrg, i.Name)
+	return name
+}
+
+// Start turns a docker image into a container.
+func (i *Image) Start() {
+	docker, _ := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
+	containerConfig := &dockerclient.ContainerConfig{
+		Image: i.PrintName(),
+		Cmd:   []string{"nginx"}}
+	containerID, err := docker.CreateContainer(containerConfig, "foobar", nil)
+	if err != nil {
+		Log(fmt.Sprintf("%s", err), "info")
+	}
+	hostConfig := &dockerclient.HostConfig{}
+	err = docker.StartContainer(containerID, hostConfig)
 }
