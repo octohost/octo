@@ -2,4 +2,4 @@
 consul: 127.0.0.1:8500
 token: anonymous
 prefix: octohost
-build_org: octoconfig
+build_org: octoprod
