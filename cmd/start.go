@@ -82,14 +82,30 @@ func (i *Image) PrintName() string {
 
 // Start turns a docker image into a container.
 func (i *Image) Start() {
+	containerName := i.PrintName()
+
+	// Make a connection to Docker.
 	docker, _ := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
+
+	// Inspect the image.
+	image, err := docker.InspectImage(containerName)
+	Log(fmt.Sprintf("Image: '%s' Cmd: '%s'", containerName, image.ContainerConfig.Cmd), "info")
+
+	// Setup the container.
 	containerConfig := &dockerclient.ContainerConfig{
-		Image: i.PrintName(),
-		Cmd:   []string{"nginx"}}
-	containerID, err := docker.CreateContainer(containerConfig, "foobar", nil)
+		Image:        containerName,
+		Cmd:          image.Config.Cmd,
+		ExposedPorts: image.Config.ExposedPorts}
+
+	// Create a containerID
+	containerID, err := docker.CreateContainer(containerConfig, "", nil)
 	if err != nil {
 		Log(fmt.Sprintf("%s", err), "info")
 	}
+
+	// Setups the hostConfig
 	hostConfig := &dockerclient.HostConfig{}
+
+	// Actually start the container.
 	err = docker.StartContainer(containerID, hostConfig)
 }
