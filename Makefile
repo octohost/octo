@@ -1,5 +1,5 @@
+OCTO_VERSION="0.2-dev"
 GIT_COMMIT=$(shell git rev-parse HEAD)
-OCTO_VERSION=$(shell ./version)
 COMPILE_DATE=$(shell date -u +%Y%m%d.%H%M%S)
 BUILD_FLAGS=-X main.CompileDate=$(COMPILE_DATE) -X main.GitCommit=$(GIT_COMMIT) -X main.Version=$(OCTO_VERSION)
 
