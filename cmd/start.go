@@ -35,6 +35,7 @@ func startStart(cmd *cobra.Command, args []string) {
 type Image struct {
 	Name     string
 	BuildOrg string
+	Tag      string
 }
 
 func checkStartFlags() {
@@ -62,21 +63,40 @@ func GetBuildOrg() string {
 	return org
 }
 
+// GetTag gets the tag or assigns "latest"
+func GetTag(passedName string) (string, string) {
+	name := ""
+	tag := ""
+	if strings.Contains(passedName, ":") {
+		imageAndTag := strings.Split(passedName, ":")
+		name = imageAndTag[0]
+		tag = imageAndTag[1]
+	} else {
+		name = passedName
+		tag = "latest"
+	}
+	return name, tag
+}
+
 // GetImage creates an Image struct from the string we get from the CLI.
 func GetImage(containerName string) Image {
+	name := ""
+	tag := ""
 	if strings.Contains(containerName, "/") {
 		parts := strings.Split(containerName, "/")
-		image := Image{Name: parts[1], BuildOrg: parts[0]}
+		name, tag = GetTag(parts[1])
+		image := Image{Name: name, Tag: tag, BuildOrg: parts[0]}
 		return image
 	}
 	buildOrg := GetBuildOrg()
-	image := Image{Name: containerName, BuildOrg: buildOrg}
+	name, tag = GetTag(containerName)
+	image := Image{Name: name, Tag: tag, BuildOrg: buildOrg}
 	return image
 }
 
 // PrintName returns the full name of the Image.
 func (i *Image) PrintName() string {
-	name := fmt.Sprintf("%s/%s", i.BuildOrg, i.Name)
+	name := fmt.Sprintf("%s/%s:%s", i.BuildOrg, i.Name, i.Tag)
 	return name
 }
 
@@ -85,10 +105,11 @@ func (i *Image) Start() {
 	containerName := i.PrintName()
 
 	// Make a connection to Docker.
-	docker, _ := dockerclient.NewDockerClient("unix:///var/run/docker.sock", nil)
+	docker := DockerConnect()
 
 	// Inspect the image.
-	image, err := docker.InspectImage(containerName)
+	image := InspectImage(docker, containerName)
+
 	Log(fmt.Sprintf("Image: '%s' Cmd: '%s'", containerName, image.ContainerConfig.Cmd), "info")
 
 	// Setup the container.
